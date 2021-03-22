@@ -1,6 +1,4 @@
 //Source file for making a Todo list 
-
-
 #include<iostream>
 
 using namespace std;
