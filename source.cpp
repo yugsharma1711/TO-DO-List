@@ -7,43 +7,57 @@ using namespace std;
 //Class Definitions
 class Node{
 public:
+    int index ;
     string content;
+    string status ;
     Node *next;
+    Node(){
+        index = 0 ; 
+        next =  NULL ;
+        content = "NILL";
+        status = "NOT DEFINED";
+    }
 };
 
 //Function Prototyping
 void push(Node*);
 void show(Node*);
 void menu();
+void deletenode(Node *, int );
 
 //Main Function
 int main(){
     int choice ;
     Node *head = new Node();  //Creating head node and allocating space in heap
-    while(true){
-        menu();
-        cin>>choice;
-        switch(choice)
-        {
-            case 1:
-                push(head);
-                break;
-            case 3:
-                show(head);
-                break;
-            case 4 :
-                exit(0);
-            default:
-                cout<<"Invalid Choice entered ";
-                break;
+    head->content = "First Node";
+    head->index = 1 ;
+    head->next = NULL;
+    push(head);
+    push(head);
+    push(head);
+    show(head);
+    int index ;
+    cout<<"Enter the index number of which task to be deleted\n";
+    cin>>index;
+    if(index == 1){
+        head =head->next;
+        Node *headref = head ;
+        while(headref != NULL){
+            headref->index--;
+            headref = headref->next;
         }
+        free(headref);
     }
+    else
+        deletenode(head, index);
+    show(head);
     cin.get();
     return 0 ;
 }
 
 //Function for adding a Node 
 void push(Node*head_ref){
+    static int count = 2 ; 
     while(head_ref->next != NULL){
         head_ref = head_ref->next;
     }
@@ -52,12 +66,14 @@ void push(Node*head_ref){
     new_node->next = NULL;
     cout<<"Enter the task to be added \n";
     cin>>new_node->content;
+    new_node ->index = count ; 
+    count++;
 }
 
 //Function for showing the list
 void show(Node *head_ref){
     while(head_ref != NULL){
-        cout<<head_ref->content;
+        cout<<"Node No . "<<head_ref->index<<" "<<head_ref->content<<"\n";
 
         head_ref = head_ref->next;
     }
@@ -69,4 +85,20 @@ void menu(){
         <<"2. Delete a Task \n"
         <<"3. Show all Tasks\n"
         <<"4. To exit ";
+}
+
+//Function for deleting a task
+void deletenode(Node *head, int index){
+    Node *prev ;
+    while(head->index != index){
+        prev = head;
+        head = head->next ;
+    }
+    prev->next = head->next;
+    if(head->next != NULL)
+        head = head->next ;
+    while(head ->next != NULL){
+        head->index--;
+        head = head->next;
+    }
 }
